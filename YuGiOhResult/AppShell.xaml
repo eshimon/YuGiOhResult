@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="YuGiOhResult.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:YuGiOhResult"
+    Shell.FlyoutBehavior="Flyout"
+    Title="YuGiOhResult">
+
+    <ShellContent
+        Title="戦績登録"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+    <ShellContent
+        Title="デッキ登録"
+        ContentTemplate="{DataTemplate local:DeckRegistration}"
+        Route="DeckRegistration" />
+
+</Shell>
