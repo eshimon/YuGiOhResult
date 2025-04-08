@@ -130,6 +130,8 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+        <!--追加-->
+        <Setter Property="Margin" Value="0,5"/>
     </Style>
 
     <Style TargetType="Frame">
@@ -159,6 +161,8 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+        <!--追加-->
+        <Setter Property="Margin" Value="0,10"/>
     </Style>
 
     <Style TargetType="Label">
@@ -178,6 +182,8 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+        <!--新規追加-->
+        <Setter Property="Margin" Value="0,5" />
     </Style>
 
     <Style TargetType="Span">
@@ -224,6 +230,8 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+        <!--追加-->
+        <Setter Property="Margin" Value="0,5"/>
     </Style>
 
     <Style TargetType="ProgressBar">
