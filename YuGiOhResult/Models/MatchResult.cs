@@ -18,5 +18,7 @@ namespace YuGiOhResult.Models
         public string Result { get; set; }
         // 備考
         public string? Memo { get; set; }
+        // 登録日時
+        public DateTime DateTime { get; set; }
     }
 }

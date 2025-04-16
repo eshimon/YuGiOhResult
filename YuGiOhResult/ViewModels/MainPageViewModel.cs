@@ -16,9 +16,9 @@ namespace YuGiOhResult.ViewModels
     partial class MainPageViewModel : ObservableObject
     {
         // 宣言
-        private string? filepath;
-        private MatchResult? matchResult = new MatchResult();
-        private IList<MatchResult> matches = new List<MatchResult>();
+        private string? matchesDataPath;
+        private string? decksDataPath;
+        private IList<MatchResult> matches;
 
         // バインディング用プロパティ宣言
         [ObservableProperty]
@@ -41,6 +41,8 @@ namespace YuGiOhResult.ViewModels
         private string? _opponentsDeck;
         [ObservableProperty]
         private string? _memo;
+        [ObservableProperty]
+        private string? _announcement;
 
 
         public MainPageViewModel()
@@ -49,29 +51,42 @@ namespace YuGiOhResult.ViewModels
             Coin = CoinList[0];
             TurnOrder = TurnOrderList[0];
             Result = ResultList[0];
+            Announcement = string.Empty;
+            string json = string.Empty;
 
-            // セーブデータ呼び出し
-            filepath = Path.Combine(FileSystem.AppDataDirectory, "savedata.json");
-            string json;
-            // セーブデータがあればロードして処理終わり
-            if (File.Exists(filepath))
+            // デッキリストの初期化
+            decksDataPath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
+            Decks = new List<Deck>();
+            if (File.Exists(decksDataPath))
             {
-                json = File.ReadAllText(filepath);
-                matches = JsonConvert.DeserializeObject<List<MatchResult>>(json) ?? new List<MatchResult>(); //Listに変換できない
-                return;
+                // デッキリストがあればロード
+                json = File.ReadAllText(decksDataPath);
+                Decks = JsonConvert.DeserializeObject<List<Deck>>(json) ?? new List<Deck>();
             }
 
-            // 空のセーブデータ(JSON)を作成
-            var emptyData = new List<MatchResult>();
-            json = System.Text.Json.JsonSerializer.Serialize(emptyData, new JsonSerializerOptions { WriteIndented = true });
+            // マッチデータ呼び出し
+            matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
+            json = string.Empty;
+            if (File.Exists(matchesDataPath))
+            {
+                // マッチデータがあればロード
+                json = File.ReadAllText(matchesDataPath);
+                matches = JsonConvert.DeserializeObject<List<MatchResult>>(json) ?? new List<MatchResult>();
+            }
+            else
+            {
+                // マッチデータが無ければ空のマッチデータ作成
+                matches = new List<MatchResult>();
+                json = System.Text.Json.JsonSerializer.Serialize(matches, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(matchesDataPath, json); // ファイルに書き込む
+            }
 
-            // ファイルに書き込む
-            File.WriteAllText(filepath, json);
+
         }
 
         // 登録コマンド
         [RelayCommand]
-        public void Resister()
+        public async Task Resister()
         {
             MatchResult result = new MatchResult
             {
@@ -79,7 +94,8 @@ namespace YuGiOhResult.ViewModels
                 OpponentsDeck = this.OpponentsDeck,
                 Coin = this.Coin,
                 Result = this.Result,
-                Memo = this.Memo
+                Memo = this.Memo,
+                DateTime = DateTime.Now
             };
             matches.Add(result);
             // JSONデータ作成
@@ -88,7 +104,11 @@ namespace YuGiOhResult.ViewModels
             options.WriteIndented = true;
             var json = System.Text.Json.JsonSerializer.Serialize(matches, options);
             // ファイルに書き込む
-            File.WriteAllText(filepath, json);
+            File.WriteAllText(matchesDataPath, json);
+            // 終了メッセージ
+            Announcement = "登録完了";
+            await Task.Delay(1500);
+            Announcement = "";
 
         }
 

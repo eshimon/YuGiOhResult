@@ -2,17 +2,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="YuGiOhResult.DeckRegistration"
-             Title="DeckRegistration">
+             xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"
+             Title="デッキ登録">
+    <ContentPage.BindingContext>
+        <vm:DeckRegistrationViewModel />
+    </ContentPage.BindingContext>
     <ScrollView>
         <Grid Margin="10,10,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Text="デッキ名" />
-            <Entry x:Name="NewDeck" Grid.Row="1"/>
-            <Button x:Name="DeckResistration" Grid.Row="2" Text="登録" />
+            <Entry x:Name="NewDeck" Grid.Row="1" Text="{Binding DeckName}"/>
+            <Button x:Name="DeckResistration" Grid.Row="2" Text="登録" Command="{Binding DeckResisterCommand}"/>
+            <Label x:Name="Announce" Grid.Row="3" Text="{Binding Announcement}" TextColor="Red" />
 
         </Grid>
     </ScrollView>
