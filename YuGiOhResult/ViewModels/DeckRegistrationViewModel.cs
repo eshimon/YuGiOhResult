@@ -28,23 +28,7 @@ namespace YuGiOhResult.ViewModels
         {
             // セーブデータ呼び出し
             filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            string json;
-            // セーブデータがあればロードして処理終わり
-            if (File.Exists(filepath))
-            {
-                json = File.ReadAllText(filepath);
-                decks = JsonConvert.DeserializeObject<List<Deck>>(json) ?? new List<Deck>();
-            }
-            else
-            {
-                // 空のセーブデータ(JSON)を作成
-                decks = new List<Deck>();
-                json = System.Text.Json.JsonSerializer.Serialize(decks, new JsonSerializerOptions { WriteIndented = true });
-
-                // ファイルに書き込む
-                File.WriteAllText(filepath, json);
-            }
-
+            decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(filepath)) ?? new List<Deck>();  // JsonLoadメソッドでJSONデータを読み取り後、デシリアライズする
         }
 
         // デッキ登録コマンド

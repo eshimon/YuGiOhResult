@@ -11,11 +11,23 @@ using Newtonsoft.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace YuGiOhResult.ViewModels
 {
     partial class DeckListViewModel : ViewModelBase
     {
+        // 宣言
+        private string filepath;
+        [ObservableProperty]
+        private ObservableCollection<Deck> _decks;
 
+        // コンストラクタ
+        public DeckListViewModel()
+        {
+            // セーブデータ呼び出し
+            filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
+            Decks = JsonConvert.DeserializeObject<ObservableCollection<Deck>>(JsonLoad(filepath)) ?? new ObservableCollection<Deck>();
+        }
     }
 }

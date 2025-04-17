@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="YuGiOhResult.Views.DeckList"
-             xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"
-             Title="DeckList">
-    <ContentPage.BindingContext>
-        <vm:DeckListViewModel />
-    </ContentPage.BindingContext>
-    <ListView>
-        
-    </ListView>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+            x:Class="YuGiOhResult.Views.DeckList"  
+            xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"  
+            Title="デッキ一覧">  
+   <ContentPage.BindingContext>  
+       <vm:DeckListViewModel />  
+   </ContentPage.BindingContext>
+    <ScrollView>
+        <ListView ItemsSource="{Binding Decks}" SeparatorVisibility="Default" >
+            <ListView.ItemTemplate >
+                <DataTemplate>
+                    <!--<TextCell Text="{Binding Name}" />-->
+                    <Grid WidthRequest="100">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Text="{Binding Name}" />
+                        <Button Grid.Column="1" Text="削除" />
+                    </Grid>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ScrollView>
 </ContentPage>
