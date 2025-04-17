@@ -13,7 +13,7 @@ using System.Text.Unicode;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class MainPageViewModel : ObservableObject
+    partial class MainPageViewModel : ViewModelBase
     {
         // 宣言
         private string? matchesDataPath;
@@ -56,31 +56,11 @@ namespace YuGiOhResult.ViewModels
 
             // デッキリストの初期化
             decksDataPath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            Decks = new List<Deck>();
-            if (File.Exists(decksDataPath))
-            {
-                // デッキリストがあればロード
-                json = File.ReadAllText(decksDataPath);
-                Decks = JsonConvert.DeserializeObject<List<Deck>>(json) ?? new List<Deck>();
-            }
-
+            Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+            
             // マッチデータ呼び出し
             matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
-            json = string.Empty;
-            if (File.Exists(matchesDataPath))
-            {
-                // マッチデータがあればロード
-                json = File.ReadAllText(matchesDataPath);
-                matches = JsonConvert.DeserializeObject<List<MatchResult>>(json) ?? new List<MatchResult>();
-            }
-            else
-            {
-                // マッチデータが無ければ空のマッチデータ作成
-                matches = new List<MatchResult>();
-                json = System.Text.Json.JsonSerializer.Serialize(matches, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(matchesDataPath, json); // ファイルに書き込む
-            }
-
+            matches = JsonConvert.DeserializeObject<List<MatchResult>>(JsonLoad(matchesDataPath)) ?? new List<MatchResult>();
 
         }
 
@@ -98,13 +78,16 @@ namespace YuGiOhResult.ViewModels
                 DateTime = DateTime.Now
             };
             matches.Add(result);
+
             // JSONデータ作成
             var options = new JsonSerializerOptions();
             options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             options.WriteIndented = true;
             var json = System.Text.Json.JsonSerializer.Serialize(matches, options);
+
             // ファイルに書き込む
             File.WriteAllText(matchesDataPath, json);
+
             // 終了メッセージ
             Announcement = "登録完了";
             await Task.Delay(1500);

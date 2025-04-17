@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class DeckRegistrationViewModel : ObservableObject
+    partial class DeckRegistrationViewModel : ViewModelBase
     {
         // 宣言
         private string filepath;
@@ -63,8 +63,6 @@ namespace YuGiOhResult.ViewModels
                 Announcement = "登録済みのデッキです";
                 return;
             }
-
-
 
             Deck newDeck = new Deck
             {
