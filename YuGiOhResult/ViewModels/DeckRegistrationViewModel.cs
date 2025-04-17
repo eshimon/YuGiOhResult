@@ -52,8 +52,17 @@ namespace YuGiOhResult.ViewModels
         public async Task DeckResister()
         {
             // 入力チェック
-            
+            if (string.IsNullOrWhiteSpace(DeckName))
+            {
+                Announcement = "デッキ名が空です";
+                return;
+            }
 
+            if (decks.Exists(x => x.Name == DeckName))
+            {
+                Announcement = "登録済みのデッキです";
+                return;
+            }
 
 
 
