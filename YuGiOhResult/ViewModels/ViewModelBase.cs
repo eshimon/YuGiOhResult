@@ -16,11 +16,30 @@ namespace YuGiOhResult.ViewModels
 {
     partial class ViewModelBase : ObservableObject
     {
+        public string? matchesDataPath;
+        public string? decksDataPath;
+
+        [ObservableProperty]
+        private List<Deck> _decks;
+
+        // コンストラクタ
+        public ViewModelBase()
+        {
+            decksDataPath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
+            matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
+        }
+
         protected string JsonLoad(string path)
         {
             if (File.Exists(path)) return File.ReadAllText(path);
             else return string.Empty;
         }
 
+        [RelayCommand]
+        public void Appearing()
+        {
+            // デッキリストの初期化
+            Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+        }
     }
 }

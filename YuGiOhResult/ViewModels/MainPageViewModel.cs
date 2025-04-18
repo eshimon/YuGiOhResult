@@ -16,13 +16,10 @@ namespace YuGiOhResult.ViewModels
     partial class MainPageViewModel : ViewModelBase
     {
         // 宣言
-        private string? matchesDataPath;
-        private string? decksDataPath;
+
         private IList<MatchResult> matches;
 
         // バインディング用プロパティ宣言
-        [ObservableProperty]
-        private IList<Deck> _decks;
         [ObservableProperty]
         private string[] _coinList = new string[] { "表", "裏" };
         [ObservableProperty]
@@ -53,13 +50,8 @@ namespace YuGiOhResult.ViewModels
             Result = ResultList[0];
             Announcement = string.Empty;
             string json = string.Empty;
-
-            // デッキリストの初期化
-            decksDataPath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
             
             // マッチデータ呼び出し
-            matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
             matches = JsonConvert.DeserializeObject<List<MatchResult>>(JsonLoad(matchesDataPath)) ?? new List<MatchResult>();
 
         }
@@ -94,7 +86,6 @@ namespace YuGiOhResult.ViewModels
             Announcement = "";
 
         }
-
     }
     
 }

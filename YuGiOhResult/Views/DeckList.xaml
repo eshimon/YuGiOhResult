@@ -2,27 +2,41 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
             x:Class="YuGiOhResult.Views.DeckList"  
-            xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"  
+            xmlns:vm="clr-namespace:YuGiOhResult.ViewModels" 
+            xmlns:models="clr-namespace:YuGiOhResult.Models"
+            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
             Title="デッキ一覧">  
    <ContentPage.BindingContext>  
        <vm:DeckListViewModel />  
    </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="MinimumHeightRequest" Value="20"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ScrollView>
-        <ListView ItemsSource="{Binding Decks}" SeparatorVisibility="Default" >
-            <ListView.ItemTemplate >
+        <CollectionView ItemsSource="{Binding Decks}" Margin="10" >
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--<TextCell Text="{Binding Name}" />-->
-                    <Grid WidthRequest="100">
+                    <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Text="{Binding Name}" />
-                        <Button Grid.Column="1" Text="削除" />
+                        <Button Grid.Column="1" Text="削除" Style="{StaticResource buttonStyle}" />
                     </Grid>
-
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </ScrollView>
 </ContentPage>

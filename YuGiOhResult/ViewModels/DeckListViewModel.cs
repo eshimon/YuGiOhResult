@@ -27,7 +27,7 @@ namespace YuGiOhResult.ViewModels
         {
             // セーブデータ呼び出し
             filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            Decks = JsonConvert.DeserializeObject<ObservableCollection<Deck>>(JsonLoad(filepath)) ?? new ObservableCollection<Deck>();
+            //Decks = JsonConvert.DeserializeObject<ObservableCollection<Deck>>(JsonLoad(filepath)) ?? new ObservableCollection<Deck>();
         }
     }
 }
