@@ -8,14 +8,16 @@
     <ContentPage.BindingContext>
         <vm:MainPageViewModel />
     </ContentPage.BindingContext>
-    <ContentPage.Behaviors>
+    <!--<ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior
             EventName="Appearing"
-            Command="{Binding AppearingCommand}" />
-    </ContentPage.Behaviors>
+            BindingContext="{Binding Path=BindingContext}"
+            Command="{Binding Path=BindingContext.AppearingCommand, x:DataType=vm:MainPageViewModel}" />
+    </ContentPage.Behaviors>-->
     <ScrollView>
         <Grid Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -57,6 +59,15 @@
             <Entry x:Name="memo" Grid.Row="11" Text="{Binding Memo}"/>
             <Button x:Name="Register" Grid.Row="12" Text="登録" Command="{Binding ResisterCommand}"/>
             <Label x:Name="alert" Grid.Row="13" Text="{Binding Announcement}" TextColor="Red"/>
+
+            <Entry Grid.Row="14" HorizontalOptions="Fill" VerticalOptions="Center">
+                <Entry.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                Command="{Binding ResisterCommand}"
+                CommandParameter="パラメーター値"
+                EventName="Completed" />
+                </Entry.Behaviors>
+            </Entry>
         </Grid>
     </ScrollView>
 

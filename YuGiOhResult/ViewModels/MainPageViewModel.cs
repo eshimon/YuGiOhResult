@@ -10,13 +10,15 @@ using YuGiOhResult.Models;
 using Newtonsoft.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Windows.Input;
+using System.Diagnostics;
 
 namespace YuGiOhResult.ViewModels
 {
     partial class MainPageViewModel : ViewModelBase
     {
-        // 宣言
 
+        // 宣言
         private IList<MatchResult> matches;
 
         // バインディング用プロパティ宣言
@@ -86,6 +88,7 @@ namespace YuGiOhResult.ViewModels
             Announcement = "";
 
         }
+
     }
     
 }
