@@ -18,7 +18,7 @@ namespace YuGiOhResult.ViewModels
     {
         // 宣言
         private string filepath;
-        private List<Deck> decks;
+        //private List<Deck> decks;
         [ObservableProperty]
         private string _deckName;
         [ObservableProperty]
@@ -26,9 +26,9 @@ namespace YuGiOhResult.ViewModels
 
         public DeckRegistrationViewModel()
         {
-            // セーブデータ呼び出し
-            filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(filepath)) ?? new List<Deck>();  // JsonLoadメソッドでJSONデータを読み取り後、デシリアライズする
+            //// セーブデータ呼び出し
+            //filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
+            //decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(filepath)) ?? new List<Deck>();  // JsonLoadメソッドでJSONデータを読み取り後、デシリアライズする
         }
 
         // デッキ登録コマンド
@@ -42,7 +42,7 @@ namespace YuGiOhResult.ViewModels
                 return;
             }
 
-            if (decks.Exists(x => x.Name == DeckName))
+            if (Decks.Exists(x => x.Name == DeckName))
             {
                 Announcement = "登録済みのデッキです";
                 return;
@@ -52,17 +52,11 @@ namespace YuGiOhResult.ViewModels
             {
                 Name = DeckName
             };
-            decks.Add(newDeck);
+            Decks.Add(newDeck);
 
-            // JSONデータ作成
-            var options = new JsonSerializerOptions();
-            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            options.WriteIndented = true;
-            var json = System.Text.Json.JsonSerializer.Serialize(decks, options);
+            // デッキリストのJSONデータを保存
+            JsonWrite(FileType.Decks);
 
-            // ファイルに書き込む
-            File.WriteAllText(filepath, json);
-            
             // 終了メッセージ
             Announcement = "登録完了";
             await Task.Delay(1500);

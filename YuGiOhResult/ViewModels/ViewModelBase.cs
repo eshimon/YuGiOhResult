@@ -16,8 +16,15 @@ namespace YuGiOhResult.ViewModels
 {
     partial class ViewModelBase : ObservableObject
     {
-        public string? matchesDataPath;
-        public string? decksDataPath;
+
+        // 宣言
+        public string matchesDataPath;
+        public string decksDataPath;
+        protected enum FileType
+        {
+            Decks,
+            Matches
+        }
 
         [ObservableProperty]
         private List<Deck> _decks;
@@ -29,12 +36,31 @@ namespace YuGiOhResult.ViewModels
             matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
         }
 
+        // JSONデータ読み込み
         protected string JsonLoad(string path)
         {
             if (File.Exists(path)) return File.ReadAllText(path);
             else return string.Empty;
         }
 
+        // JSONデータ書き込み
+        protected void JsonWrite(FileType fileType)
+        {
+            // JSONデータ作成
+            var options = new JsonSerializerOptions();
+            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+            options.WriteIndented = true;
+            var json = System.Text.Json.JsonSerializer.Serialize(Decks, options);
+
+            if (fileType == FileType.Decks)
+                // デッキリストのJSONデータを保存
+                File.WriteAllText(decksDataPath, json);
+            else
+                // マッチリストのJSONデータを保存
+                File.WriteAllText(matchesDataPath, json);
+        }
+
+        // 画面表示イベント
         [RelayCommand]
         public void Appearing()
         {

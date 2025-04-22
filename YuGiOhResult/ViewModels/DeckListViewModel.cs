@@ -18,16 +18,26 @@ namespace YuGiOhResult.ViewModels
     partial class DeckListViewModel : ViewModelBase
     {
         // 宣言
-        private string filepath;
         [ObservableProperty]
-        private ObservableCollection<Deck> _decks;
+        private Deck _selectedDeck;
 
         // コンストラクタ
-        public DeckListViewModel()
+        public DeckListViewModel() { }
+        
+        // デッキ削除コマンド
+        [RelayCommand]
+        public async Task DeleteDeck()
         {
-            // セーブデータ呼び出し
-            filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            //Decks = JsonConvert.DeserializeObject<ObservableCollection<Deck>>(JsonLoad(filepath)) ?? new ObservableCollection<Deck>();
+            Decks.Remove(SelectedDeck);
+            // JSON書き込み
+            JsonWrite(FileType.Decks);
+
+            // 終了メッセージ
+            //Announcement = "登録完了";
+            await Task.Delay(1500);
+            //Announcement = "";
+
         }
+
     }
 }

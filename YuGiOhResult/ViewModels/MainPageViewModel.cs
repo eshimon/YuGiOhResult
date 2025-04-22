@@ -73,14 +73,8 @@ namespace YuGiOhResult.ViewModels
             };
             matches.Add(result);
 
-            // JSONデータ作成
-            var options = new JsonSerializerOptions();
-            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            options.WriteIndented = true;
-            var json = System.Text.Json.JsonSerializer.Serialize(matches, options);
-
-            // ファイルに書き込む
-            File.WriteAllText(matchesDataPath, json);
+            // JSON書き込み
+            JsonWrite(FileType.Matches);
 
             // 終了メッセージ
             Announcement = "登録完了";

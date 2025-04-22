@@ -5,15 +5,7 @@
             xmlns:vm="clr-namespace:YuGiOhResult.ViewModels" 
             xmlns:models="clr-namespace:YuGiOhResult.Models"
             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-            Title="デッキ一覧">  
-   <ContentPage.BindingContext>  
-       <vm:DeckListViewModel />  
-   </ContentPage.BindingContext>
-    <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
-            EventName="Appearing"
-            Command="{Binding AppearingCommand}" />
-    </ContentPage.Behaviors>
+            Title="デッキ一覧">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="buttonStyle" TargetType="Button">
@@ -24,7 +16,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <CollectionView ItemsSource="{Binding Decks}" Margin="10" >
+        <CollectionView ItemsSource="{Binding Decks}" SelectedItem="{Binding SelectedDeck}" Margin="10" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -33,7 +25,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Text="{Binding Name}" />
-                        <Button Grid.Column="1" Text="削除" Style="{StaticResource buttonStyle}" />
+                        <Button Grid.Column="1" Text="削除" Style="{StaticResource buttonStyle}" Command="{Binding DeleteDeckCommand}"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
