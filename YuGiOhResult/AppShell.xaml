@@ -20,5 +20,8 @@
         Title="デッキ一覧"
         ContentTemplate="{DataTemplate views:DeckList}"
         Route="DeckList" />
-
+    <ShellContent
+        Title="対戦履歴"
+        ContentTemplate="{DataTemplate views:ResultList}"
+        Route="ResultList" />
 </Shell>

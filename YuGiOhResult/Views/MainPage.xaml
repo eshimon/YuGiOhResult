@@ -38,7 +38,7 @@
             <Picker x:Name="PlayedDeck"  Grid.Row="1" 
                     ItemsSource="{Binding Decks}" 
                     ItemDisplayBinding="{Binding Name}" 
-                    SelectedItem="{Binding PlayedDeck}" />
+                    SelectedItem="{Binding PlayedDeck, Mode=TwoWay}" />
             <Label Grid.Row="2" Text="対戦デッキ"/>
             <Picker x:Name="OpponentsDeck"  Grid.Row="3"  
                     ItemsSource="{Binding Decks}" 

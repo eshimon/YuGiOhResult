@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="YuGiOhResult.Views.ResultList"
+             xmlns:vm="clr-namespace:YuGiOhResult.ViewModels" 
+             xmlns:models="clr-namespace:YuGiOhResult.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="対戦履歴"
+             x:Name="ResultListPage"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="MinimumHeightRequest" Value="20"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <CollectionView x:Name="ResultListView" ItemsSource="{Binding Matches}" SelectionMode="Single" Margin="10" >
+            <!--<CollectionView.Header>
+                <StackLayout BackgroundColor="LightGray">
+                    <Label Margin="10,0,0,0"
+                   Text="Monkeys"
+                   FontSize="12"
+                   FontAttributes="Bold" />
+                </StackLayout>
+            </CollectionView.Header>-->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Text="{Binding PlayedDeck}" />
+                        <Label Grid.Column="1" Text="{Binding OpponentsDeck}" />
+                        <Label Grid.Column="2" Text="{Binding Coin}" />
+                        <Label Grid.Column="3" Text="{Binding TurnOrder}" />
+                        <Label Grid.Column="4" Text="{Binding Result}" />
+                        <Label Grid.Column="5" Text="{Binding Memo}" />
+                        <Label Grid.Column="6" Text="{Binding Date}" />
+                        <Button Grid.Column="1" Text="削除" Style="{StaticResource buttonStyle}"
+                                Command="{Binding BindingContext.DeleteMatchCommand, Source={x:Reference ResultListPage}}"
+                                CommandParameter="{Binding}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ScrollView>
+</ContentPage>

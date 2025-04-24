@@ -12,7 +12,7 @@
         {
             return new Window(new AppShell())
             {
-                Title = "SizeTest",
+                Title = "MD対戦履歴",
                 Width = 1000,
                 Height = 700,
                 X = 50,

@@ -17,7 +17,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <CollectionView x:Name="DeckListView" ItemsSource="{Binding Decks}" SelectionMode="Single" SelectedItem="{Binding SelectedDeck}" Margin="10" >
+        <CollectionView x:Name="DeckListView" ItemsSource="{Binding Decks}" SelectionMode="Single" Margin="10" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

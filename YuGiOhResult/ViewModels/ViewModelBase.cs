@@ -63,19 +63,25 @@ namespace YuGiOhResult.ViewModels
             var options = new JsonSerializerOptions();
             options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             options.WriteIndented = true;
-            var json = System.Text.Json.JsonSerializer.Serialize(Decks, options);
 
-            if (fileType == FileType.Decks)
+            if (fileType == FileType.Decks) 
+            {
                 // デッキリストのJSONデータを保存
+                var json = System.Text.Json.JsonSerializer.Serialize(Decks, options);
                 File.WriteAllText(decksDataPath, json);
+            }
             else
+            {
                 // マッチリストのJSONデータを保存
+                var json = System.Text.Json.JsonSerializer.Serialize(Matches, options);
                 File.WriteAllText(matchesDataPath, json);
+            }
+
         }
 
         // 画面表示イベント
         [RelayCommand]
-        public void Appearing()
+        public virtual void Appearing()
         {
             // デッキリストの初期化
             JsonLoad(FileType.Decks);
