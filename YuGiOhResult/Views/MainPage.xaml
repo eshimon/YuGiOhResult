@@ -4,7 +4,6 @@
              x:Class="YuGiOhResult.Views.MainPage"
              xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             HeightRequest="2000"
              >
     <!--<ContentPage.BindingContext>
         <vm:MainPageViewModel />
@@ -16,6 +15,8 @@
             Command="{Binding Path=BindingContext.AppearingCommand, x:DataType=vm:MainPageViewModel}" />
     </ContentPage.Behaviors>-->
     <ScrollView>
+        <VerticalStackLayout>
+           
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -60,6 +61,6 @@
             <Button x:Name="Register" Grid.Row="12" Text="登録" Command="{Binding ResisterCommand}"/>
             <Label x:Name="alert" Grid.Row="13" Text="{Binding Announcement}" TextColor="Red"/>
         </Grid>
+        </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

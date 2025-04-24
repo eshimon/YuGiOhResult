@@ -12,30 +12,29 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Controls;
 
 namespace YuGiOhResult.ViewModels
 {
     partial class DeckListViewModel : ViewModelBase
     {
-        // 宣言
-        [ObservableProperty]
-        private Deck _selectedDeck;
-
-        // コンストラクタ
-        public DeckListViewModel() { }
         
         // デッキ削除コマンド
         [RelayCommand]
-        public async Task DeleteDeck()
+        public async Task DeleteDeck(Deck deck)
         {
-            Decks.Remove(SelectedDeck);
+            // 確認ダイアログを表示
+            bool answer = await Application.Current.MainPage.DisplayAlert("確認", $"{deck.Name}を削除しますか？", "Yes", "No");
+            if (!answer) return;
+
+            // デッキリストから削除
+            Decks.Remove(deck);
+
             // JSON書き込み
             JsonWrite(FileType.Decks);
 
-            // 終了メッセージ
-            //Announcement = "登録完了";
-            await Task.Delay(1500);
-            //Announcement = "";
+            // デッキリストのロード
+            JsonLoad(FileType.Decks);
 
         }
 

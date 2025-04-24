@@ -10,7 +10,14 @@
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            return new Window(new AppShell())
+            {
+                Title = "SizeTest",
+                Width = 1000,
+                Height = 700,
+                X = 50,
+                Y = 50
+            };
         }
     }
 }

@@ -4,9 +4,6 @@
              x:Class="YuGiOhResult.Views.DeckRegistration"
              xmlns:vm="clr-namespace:YuGiOhResult.ViewModels"
              Title="デッキ登録">
-    <ContentPage.BindingContext>
-        <vm:DeckRegistrationViewModel />
-    </ContentPage.BindingContext>
     <ScrollView>
         <Grid Margin="10,10,10,10">
             <Grid.RowDefinitions>

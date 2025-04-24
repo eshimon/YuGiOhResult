@@ -18,8 +18,8 @@ namespace YuGiOhResult.ViewModels
     {
 
         // 宣言
-        public string matchesDataPath;
-        public string decksDataPath;
+        protected string matchesDataPath;
+        protected string decksDataPath;
         protected enum FileType
         {
             Decks,
@@ -28,6 +28,9 @@ namespace YuGiOhResult.ViewModels
 
         [ObservableProperty]
         private List<Deck> _decks;
+
+        [ObservableProperty]
+        private List<MatchResult> _matches;
 
         // コンストラクタ
         public ViewModelBase()
@@ -41,6 +44,16 @@ namespace YuGiOhResult.ViewModels
         {
             if (File.Exists(path)) return File.ReadAllText(path);
             else return string.Empty;
+        }
+
+        protected void JsonLoad(FileType fileType) 
+        {
+            if (fileType == FileType.Decks)
+                // デッキリストのJSONデータを読み込み
+                Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+            else
+                // マッチリストのJSONデータを読み込み
+                Matches = JsonConvert.DeserializeObject<List<MatchResult>>(JsonLoad(matchesDataPath)) ?? new List<MatchResult>();
         }
 
         // JSONデータ書き込み
@@ -65,7 +78,7 @@ namespace YuGiOhResult.ViewModels
         public void Appearing()
         {
             // デッキリストの初期化
-            Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+            JsonLoad(FileType.Decks);
         }
     }
 }

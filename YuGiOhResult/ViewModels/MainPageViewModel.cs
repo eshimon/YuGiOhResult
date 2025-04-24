@@ -17,10 +17,6 @@ namespace YuGiOhResult.ViewModels
 {
     partial class MainPageViewModel : ViewModelBase
     {
-
-        // 宣言
-        private IList<MatchResult> matches;
-
         // バインディング用プロパティ宣言
         [ObservableProperty]
         private string[] _coinList = new string[] { "表", "裏" };
@@ -54,8 +50,7 @@ namespace YuGiOhResult.ViewModels
             string json = string.Empty;
             
             // マッチデータ呼び出し
-            matches = JsonConvert.DeserializeObject<List<MatchResult>>(JsonLoad(matchesDataPath)) ?? new List<MatchResult>();
-
+            JsonLoad(FileType.Matches);
         }
 
         // 登録コマンド
@@ -71,7 +66,7 @@ namespace YuGiOhResult.ViewModels
                 Memo = this.Memo,
                 DateTime = DateTime.Now
             };
-            matches.Add(result);
+            Matches.Add(result);
 
             // JSON書き込み
             JsonWrite(FileType.Matches);

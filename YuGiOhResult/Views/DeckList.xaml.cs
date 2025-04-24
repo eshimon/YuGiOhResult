@@ -8,7 +8,7 @@ public partial class DeckList : ContentPage
 		InitializeComponent();
 
         // BindingContext‚ğİ’è
-        var viewModel = new ViewModels.MainPageViewModel();
+        var viewModel = new ViewModels.DeckListViewModel();
         BindingContext = viewModel;
 
         // EventToCommandBehavior‚ğContentPage‚ÌBehaviors‚É’Ç‰Á

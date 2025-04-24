@@ -18,7 +18,6 @@ namespace YuGiOhResult.ViewModels
     {
         // 宣言
         private string filepath;
-        //private List<Deck> decks;
         [ObservableProperty]
         private string _deckName;
         [ObservableProperty]
@@ -59,7 +58,7 @@ namespace YuGiOhResult.ViewModels
 
             // 終了メッセージ
             Announcement = "登録完了";
-            await Task.Delay(1500);
+            await Task.Delay(1000);
             Announcement = "";
         } 
 
