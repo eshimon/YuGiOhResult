@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace YuGiOhResult.ViewModels
 {
@@ -30,7 +31,7 @@ namespace YuGiOhResult.ViewModels
         private List<Deck> _decks;
 
         [ObservableProperty]
-        private List<MatchResult> _matches;
+        private ObservableCollection<MatchResult> _matches;
 
         // コンストラクタ
         public ViewModelBase()
@@ -53,7 +54,7 @@ namespace YuGiOhResult.ViewModels
                 Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
             else
                 // マッチリストのJSONデータを読み込み
-                Matches = JsonConvert.DeserializeObject<List<MatchResult>>(JsonLoad(matchesDataPath)) ?? new List<MatchResult>();
+                Matches = JsonConvert.DeserializeObject<ObservableCollection<MatchResult>>(JsonLoad(matchesDataPath)) ?? new ObservableCollection<MatchResult>();
         }
 
         // JSONデータ書き込み

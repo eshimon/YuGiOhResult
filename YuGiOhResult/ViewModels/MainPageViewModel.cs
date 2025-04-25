@@ -31,9 +31,9 @@ namespace YuGiOhResult.ViewModels
         [ObservableProperty]
         private string _result;
         [ObservableProperty]
-        private string? _playedDeck;
+        private Deck? _playedDeck;
         [ObservableProperty]
-        private string? _opponentsDeck;
+        private Deck? _opponentsDeck;
         [ObservableProperty]
         private string? _memo;
         [ObservableProperty]
@@ -59,9 +59,10 @@ namespace YuGiOhResult.ViewModels
         {
             MatchResult result = new MatchResult
             {
-                PlayedDeck = this.PlayedDeck,
-                OpponentsDeck = this.OpponentsDeck,
+                PlayedDeckName = this.PlayedDeck != null ? this.PlayedDeck.Name : string.Empty,
+                OpponentsDeckName = this.OpponentsDeck != null ? this.OpponentsDeck.Name : string.Empty,
                 Coin = this.Coin,
+                TurnOrder = this.TurnOrder,
                 Result = this.Result,
                 Memo = this.Memo,
                 DateTime = DateTime.Now

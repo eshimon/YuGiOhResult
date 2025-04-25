@@ -23,13 +23,6 @@ namespace YuGiOhResult.ViewModels
         [ObservableProperty]
         private string _announcement;
 
-        public DeckRegistrationViewModel()
-        {
-            //// セーブデータ呼び出し
-            //filepath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
-            //decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(filepath)) ?? new List<Deck>();  // JsonLoadメソッドでJSONデータを読み取り後、デシリアライズする
-        }
-
         // デッキ登録コマンド
         [RelayCommand]
         public async Task DeckResister()
