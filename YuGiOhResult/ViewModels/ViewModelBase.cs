@@ -28,10 +28,10 @@ namespace YuGiOhResult.ViewModels
         }
 
         [ObservableProperty]
-        private List<Deck> _decks;
+        private List<Deck> _decks;　// デッキリスト
 
         [ObservableProperty]
-        private ObservableCollection<MatchResult> _matches;
+        private ObservableCollection<MatchResult> _matches;　// マッチデータ
 
         // コンストラクタ
         public ViewModelBase()
@@ -64,7 +64,6 @@ namespace YuGiOhResult.ViewModels
             var options = new JsonSerializerOptions();
             options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             options.WriteIndented = true;
-
             if (fileType == FileType.Decks) 
             {
                 // デッキリストのJSONデータを保存

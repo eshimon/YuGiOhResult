@@ -17,7 +17,6 @@ namespace YuGiOhResult.ViewModels
     partial class DeckRegistrationViewModel : ViewModelBase
     {
         // 宣言
-        private string filepath;
         [ObservableProperty]
         private string _deckName;
         [ObservableProperty]
