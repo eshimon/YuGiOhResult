@@ -27,11 +27,9 @@ namespace YuGiOhResult.ViewModels
             var currentPage = Application.Current?.Windows.FirstOrDefault()?.Page;
 
             if (currentPage == null)
-            {
                 // ページが取得できない場合は処理を中断
                 return;
-            }
-
+            
             // 確認ダイアログを表示
             bool answer = await currentPage.DisplayAlert("確認", $"{match.FormattedDateTime}の対戦履歴を削除しますか？", "Yes", "No");
             if (!answer) return;
