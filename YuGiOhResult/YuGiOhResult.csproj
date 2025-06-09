@@ -82,6 +82,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Converters\" />
+	  <Folder Include="Service\" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">

@@ -21,6 +21,8 @@ namespace YuGiOhResult.ViewModels
         // 宣言
         protected string matchesDataPath;
         protected string decksDataPath;
+        protected string ociBucketUrl = "https://objectstorage.ap-northeast-1.oraclecloud.com/n/nrcfexeh4wiw/b/YuGiOhCounter_Backet/o/"; // OCIのバケットURL
+        protected string authToken = "ed5#(iCvj_SQg<5NU8ZO"; // OCIの認証トークン（セキュリティ上の理由で実際のトークンはここに書かないこと）
         protected enum FileType
         {
             Decks,
@@ -77,6 +79,21 @@ namespace YuGiOhResult.ViewModels
                 File.WriteAllText(matchesDataPath, json);
             }
 
+        }
+
+        // OCIにJSONデータをアップロードする
+        public async Task UploadJsonToOCI(string jsonContent)
+        {
+            using HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authToken}");
+
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync($"{ociBucketUrl}/yourfile.json", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Upload successful!");
+            }
         }
 
         // 画面表示イベント
