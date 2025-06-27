@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using YuGiOhResult.Models;
 using Newtonsoft.Json;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using System.Text.RegularExpressions;
+using Oci.Common.Auth;
+using Oci.Common.Http.Signing;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Text.Unicode;
+using System.Threading.Tasks;
+using YuGiOhResult.Models;
+
 
 namespace YuGiOhResult.ViewModels
 {
@@ -19,10 +23,9 @@ namespace YuGiOhResult.ViewModels
     {
 
         // 宣言
-        protected string matchesDataPath;
+        protected string matchesDataPath;   
         protected string decksDataPath;
-        protected string ociBucketUrl = "https://objectstorage.ap-northeast-1.oraclecloud.com/n/nrcfexeh4wiw/b/YuGiOhCounter_Backet/o/"; // OCIのバケットURL
-        protected string authToken = "ed5#(iCvj_SQg<5NU8ZO"; // OCIの認証トークン（セキュリティ上の理由で実際のトークンはここに書かないこと）
+
         protected enum FileType
         {
             Decks,
@@ -82,19 +85,48 @@ namespace YuGiOhResult.ViewModels
         }
 
         // OCIにJSONデータをアップロードする
-        public async Task UploadJsonToOCI(string jsonContent)
+        protected async Task UploadJsonToOCIAsync(FileType fileType)
         {
-            using HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {authToken}");
+            // ファイルパスを取得
+            var jsonPath = fileType == FileType.Decks ? decksDataPath : matchesDataPath;
+           
+            // JSONファイルをバイト配列として読み込む
+            var fileBytes = File.ReadAllBytes(jsonPath);
 
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync($"{ociBucketUrl}/yourfile.json", content);
+            // OCIのアップロード先情報を設定
+            var namespaceName = "nrcfexeh4wiw";
+            var bucketName = "YuGiOhCounter_Backet";
+            var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
+            var region = "ap-tokyo-1";
+            var uploadUri = $"https://objectstorage.{region}.oraclecloud.com/n/{namespaceName}/b/{bucketName}/o/{objectName}";
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Console.WriteLine("Upload successful!");
+                // OCIの署名付きHandlerを使う
+                var handler = OciHttpClientHandler.FromConfigFile("C:\\Users\\User\\.oci\\config", "DEFAULT");
+                using var client = new HttpClient(handler);
+
+                var request = new HttpRequestMessage(HttpMethod.Put, new Uri(uploadUri))
+                {
+                    Content = new ByteArrayContent(fileBytes)
+                };
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                    Console.WriteLine("✅ アップロード成功！");
+                else
+                    Console.WriteLine($"❌ エラー：{response.StatusCode}, 内容: {await response.Content.ReadAsStringAsync()}");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ エラー: {ex.Message}");
+                return;
+            }
+
         }
+
+
 
         // 画面表示イベント
         [RelayCommand]

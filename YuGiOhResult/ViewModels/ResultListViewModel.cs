@@ -40,7 +40,14 @@ namespace YuGiOhResult.ViewModels
             // JSONデータ書き込み
             JsonWrite(FileType.Matches);
         }
+
+        public ResultListViewModel()
+        {
+            UploadJsonToOCIAsync(FileType.Decks);
+            UploadJsonToOCIAsync(FileType.Matches);
+        }
     }
+
 
 
 }

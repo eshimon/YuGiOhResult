@@ -77,7 +77,7 @@ public partial class ResultList : ContentPage
             {
                 ColumnSpacing = 1,
                 RowSpacing = 1,
-                BackgroundColor = Colors.White,
+                BackgroundColor = Colors.Black,
                 ColumnDefinitions =
         {
             new ColumnDefinition { Width = 100 },
