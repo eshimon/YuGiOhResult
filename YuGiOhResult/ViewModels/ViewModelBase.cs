@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -65,23 +66,30 @@ namespace YuGiOhResult.ViewModels
         // JSONデータ書き込み
         protected void JsonWrite(FileType fileType)
         {
-            // JSONデータ作成
-            var options = new JsonSerializerOptions();
-            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            options.WriteIndented = true;
+
             if (fileType == FileType.Decks) 
             {
                 // デッキリストのJSONデータを保存
-                var json = System.Text.Json.JsonSerializer.Serialize(Decks, options);
+                var json = SerializeToJson(Decks);
                 File.WriteAllText(decksDataPath, json);
             }
             else
             {
                 // マッチリストのJSONデータを保存
-                var json = System.Text.Json.JsonSerializer.Serialize(Matches, options);
+                var json = SerializeToJson(Matches);
                 File.WriteAllText(matchesDataPath, json);
             }
+        }
 
+        // JSONシリアル化
+        protected string SerializeToJson(object data)
+        {
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true,
+            };
+            return System.Text.Json.JsonSerializer.Serialize(data, options);
         }
 
         // OCIにJSONデータをアップロードする
@@ -89,34 +97,26 @@ namespace YuGiOhResult.ViewModels
         {
             // ファイルパスを取得
             var jsonPath = fileType == FileType.Decks ? decksDataPath : matchesDataPath;
-           
-            // JSONファイルをバイト配列として読み込む
-            var fileBytes = File.ReadAllBytes(jsonPath);
+
+            // JSONファイルをJSON文字列に変換
+            Object content = (fileType == FileType.Decks) ? this.Decks : this.Matches;
+            string payload = SerializeToJson(content);
 
             // OCIのアップロード先情報を設定
             var namespaceName = "nrcfexeh4wiw";
             var bucketName = "YuGiOhCounter_Backet";
             var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
-            var region = "ap-tokyo-1";
-            var uploadUri = $"https://objectstorage.{region}.oraclecloud.com/n/{namespaceName}/b/{bucketName}/o/{objectName}";
+            var uploadUri = $"http://161.33.135.51:8000/upload-objects/{namespaceName}/{bucketName}/{objectName}";
+
 
             try
             {
-                // OCIの署名付きHandlerを使う
-                var handler = OciHttpClientHandler.FromConfigFile("C:\\Users\\User\\.oci\\config", "DEFAULT");
-                using var client = new HttpClient(handler);
 
-                var request = new HttpRequestMessage(HttpMethod.Put, new Uri(uploadUri))
-                {
-                    Content = new ByteArrayContent(fileBytes)
-                };
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                using HttpClient client = new HttpClient();
+                using var multiPartContent = new MultipartFormDataContent();
+                multiPartContent.Add(new StringContent(payload, Encoding.UTF8, "application/json"), "json_data");
+                using HttpResponseMessage response = await client.PostAsync(uploadUri, multiPartContent);
 
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
-                    Console.WriteLine("✅ アップロード成功！");
-                else
-                    Console.WriteLine($"❌ エラー：{response.StatusCode}, 内容: {await response.Content.ReadAsStringAsync()}");
             }
             catch (Exception ex)
             {
