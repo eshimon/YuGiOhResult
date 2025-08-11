@@ -95,26 +95,26 @@ namespace YuGiOhResult.ViewModels
         // OCIにJSONデータをアップロードする
         protected async Task UploadJsonToOCIAsync(FileType fileType)
         {
-            // ファイルパスを取得
-            var jsonPath = fileType == FileType.Decks ? decksDataPath : matchesDataPath;
-
-            // JSONファイルをJSON文字列に変換
-            Object content = (fileType == FileType.Decks) ? this.Decks : this.Matches;
-            string payload = SerializeToJson(content);
-
-            // OCIのアップロード先情報を設定
-            var namespaceName = "nrcfexeh4wiw";
-            var bucketName = "YuGiOhCounter_Backet";
-            var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
-            var uploadUri = $"http://161.33.135.51:8000/upload-objects/{namespaceName}/{bucketName}/{objectName}";
-
-
             try
             {
+                // アップロード対象のファイルパスを取得
+                var jsonPath = fileType == FileType.Decks ? decksDataPath : matchesDataPath;
 
-                using HttpClient client = new HttpClient();
+                // ペイロード作成
                 using var multiPartContent = new MultipartFormDataContent();
-                multiPartContent.Add(new StringContent(payload, Encoding.UTF8, "application/json"), "json_data");
+                using var fileStream = File.OpenRead(jsonPath);
+                using var streamContent = new StreamContent(fileStream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                multiPartContent.Add(streamContent, "file", Path.GetFileName(jsonPath));
+
+                // OCIのアップロード先情報を設定
+                var namespaceName = "nrcfexeh4wiw";
+                var bucketName = "YuGiOhCounter_Backet";
+                var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
+                var uploadUri = $"http://161.33.135.51:8000/upload-object/{namespaceName}/{bucketName}/{objectName}";
+
+                // HttpClientを使用してアップロード
+                using HttpClient client = new HttpClient();
                 using HttpResponseMessage response = await client.PostAsync(uploadUri, multiPartContent);
 
             }
