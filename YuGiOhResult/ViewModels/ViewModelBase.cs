@@ -46,13 +46,14 @@ namespace YuGiOhResult.ViewModels
             matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
         }
 
-        // JSONデータ読み込み
+        // JSONデータ読み込み（下記同名メソッドのサブルーチン）
         protected string JsonLoad(string path)
         {
             if (File.Exists(path)) return File.ReadAllText(path);
             else return string.Empty;
         }
 
+        // JSONデータ読み込み
         protected void JsonLoad(FileType fileType) 
         {
             if (fileType == FileType.Decks)
@@ -92,6 +93,19 @@ namespace YuGiOhResult.ViewModels
             return System.Text.Json.JsonSerializer.Serialize(data, options);
         }
 
+        // appsettings.jsonから値を取得
+        private async Task<AppSettings> LoadAppSettingsAsync()
+        {
+            using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("appsettings.json");
+            using StreamReader reader = new StreamReader(fileStream);
+            string jsonContent = await reader.ReadToEndAsync();
+
+            var jObject = Newtonsoft.Json.Linq.JObject.Parse(jsonContent);
+            var appSettingsSection = jObject["AppSettings"];
+            var appSettings = appSettingsSection.ToObject<AppSettings>();
+            return appSettings;
+        }
+
         // OCIにJSONデータをアップロードする
         protected async Task UploadJsonToOCIAsync(FileType fileType)
         {
@@ -108,10 +122,9 @@ namespace YuGiOhResult.ViewModels
                 multiPartContent.Add(streamContent, "file", Path.GetFileName(jsonPath));
 
                 // OCIのアップロード先情報を設定
-                var namespaceName = "nrcfexeh4wiw";
-                var bucketName = "YuGiOhCounter_Backet";
+                AppSettings appSettings = await LoadAppSettingsAsync();
                 var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
-                var uploadUri = $"http://161.33.135.51:8000/upload-object/{namespaceName}/{bucketName}/{objectName}";
+                var uploadUri = $"{appSettings.ApiHttp}/upload-object/{appSettings.NamespaceName}/{appSettings.BacketName}/{objectName}";
 
                 // HttpClientを使用してアップロード
                 using HttpClient client = new HttpClient();

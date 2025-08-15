@@ -101,4 +101,10 @@
 	  </PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiAsset Update="Resources\Raw\appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </MauiAsset>
+	</ItemGroup>
+
 </Project>
