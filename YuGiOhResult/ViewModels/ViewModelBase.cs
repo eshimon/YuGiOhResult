@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Oci.Common.Auth;
 using Oci.Common.Http.Signing;
@@ -140,7 +141,7 @@ namespace YuGiOhResult.ViewModels
 
         }
         // JSONデータをOCIからダウンロードする
-        private async Task DownloadJsonAsync(FileType fileType) 
+        protected async Task DownloadJsonAsync(FileType fileType) 
         {
             try
             {
@@ -152,6 +153,26 @@ namespace YuGiOhResult.ViewModels
                 // HttpClientを使用してアップロード
                 using HttpClient client = new HttpClient();
                 using HttpResponseMessage response = await client.GetAsync(downloadUrl);
+
+                response.EnsureSuccessStatusCode(); // リクエストが成功したか確
+                using Stream contentStream = await response.Content.ReadAsStreamAsync();
+                if (FileType.Decks == fileType)
+                {
+                    var newDecks = new List<Deck>();
+                    newDecks = await System.Text.Json.JsonSerializer.DeserializeAsync<List<Deck>>(contentStream);
+                    if (newDecks.IsNullOrEmpty()) return;
+                    Decks = newDecks; 
+                    JsonWrite(FileType.Decks); // デッキリストのJSONデータを保存
+                }
+                else
+                {
+                    var newMatches  = new ObservableCollection<MatchResult>();
+                    newMatches = await System.Text.Json.JsonSerializer.DeserializeAsync<ObservableCollection<MatchResult>>(contentStream);
+                    if (newMatches.IsNullOrEmpty()) return;
+                    Matches = newMatches;
+                    JsonWrite(FileType.Matches); // マッチリストのJSONデータを保存
+                }
+
             }
             catch(Exception ex)
             {

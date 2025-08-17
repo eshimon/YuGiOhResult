@@ -48,6 +48,7 @@ namespace YuGiOhResult.ViewModels
 
         public ResultListViewModel()
         {
+            DownloadJsonAsync(FileType.Matches);
         }
     }
 
