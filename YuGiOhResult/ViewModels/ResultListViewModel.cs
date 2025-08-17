@@ -15,8 +15,8 @@ namespace YuGiOhResult.ViewModels
         {
             JsonLoad(FileType.Matches);
             JsonLoad(FileType.Decks);
-            UploadJsonToOCIAsync(FileType.Decks);
-            UploadJsonToOCIAsync(FileType.Matches);
+            //UploadJsonToOCIAsync(FileType.Decks);
+            //UploadJsonToOCIAsync(FileType.Matches);
         }
 
         // 削除コマンド
@@ -41,12 +41,13 @@ namespace YuGiOhResult.ViewModels
 
             // JSONデータ書き込み
             JsonWrite(FileType.Matches);
+
+            // JSONをOCIにアップロード
+            await UploadJsonToOCIAsync(FileType.Matches);
         }
 
         public ResultListViewModel()
         {
-            //UploadJsonToOCIAsync(FileType.Decks);
-            //UploadJsonToOCIAsync(FileType.Matches);
         }
     }
 

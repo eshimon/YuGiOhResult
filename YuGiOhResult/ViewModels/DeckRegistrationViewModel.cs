@@ -48,6 +48,9 @@ namespace YuGiOhResult.ViewModels
             // デッキリストのJSONデータを保存
             JsonWrite(FileType.Decks);
 
+            // JSONをOCIにアップロード
+            await UploadJsonToOCIAsync(FileType.Decks);
+
             // 終了メッセージ
             Announcement = "登録完了";
             await Task.Delay(1000);

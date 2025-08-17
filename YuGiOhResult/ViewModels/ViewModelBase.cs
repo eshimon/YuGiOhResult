@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
@@ -138,7 +139,26 @@ namespace YuGiOhResult.ViewModels
             }
 
         }
+        // JSONデータをOCIからダウンロードする
+        private async Task DownloadJsonAsync(FileType fileType) 
+        {
+            try
+            {
+                // OCIのダウンロード元情報を設定
+                AppSettings appSettings = await LoadAppSettingsAsync();
+                var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
+                var downloadUrl = $"{appSettings.ApiHttp}/download-object/{appSettings.NamespaceName}/{appSettings.BacketName}/{objectName}";
 
+                // HttpClientを使用してアップロード
+                using HttpClient client = new HttpClient();
+                using HttpResponseMessage response = await client.GetAsync(downloadUrl);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"❌ エラー: {ex.Message}");
+                return;
+            }
+        }
 
 
         // 画面表示イベント

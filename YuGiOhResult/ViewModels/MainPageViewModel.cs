@@ -72,6 +72,9 @@ namespace YuGiOhResult.ViewModels
             // JSON書き込み
             JsonWrite(FileType.Matches);
 
+            // JSONをOCIにアップロード
+            await UploadJsonToOCIAsync(FileType.Matches);
+
             // 終了メッセージ
             Announcement = "登録完了";
             await Task.Delay(1500);

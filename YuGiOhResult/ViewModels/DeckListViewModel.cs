@@ -33,6 +33,9 @@ namespace YuGiOhResult.ViewModels
             // JSON書き込み
             JsonWrite(FileType.Decks);
 
+            // JSONをOCIにアップロード
+            await UploadJsonToOCIAsync(FileType.Decks);
+
             // デッキリストのロード
             JsonLoad(FileType.Decks);
 
