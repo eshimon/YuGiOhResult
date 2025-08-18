@@ -73,19 +73,19 @@ namespace YuGiOhResult.ViewModels
             if (fileType == FileType.Decks) 
             {
                 // デッキリストのJSONデータを保存
-                var json = SerializeToJson(Decks);
+                var json = SerializeToJsonString(Decks);
                 File.WriteAllText(decksDataPath, json);
             }
             else
             {
                 // マッチリストのJSONデータを保存
-                var json = SerializeToJson(Matches);
+                var json = SerializeToJsonString(Matches);
                 File.WriteAllText(matchesDataPath, json);
             }
         }
 
-        // JSONシリアル化
-        protected string SerializeToJson(object data)
+        // JSON文字列へシリアライズ
+        private string SerializeToJsonString(object data)
         {
             var options = new JsonSerializerOptions
             {
@@ -141,6 +141,14 @@ namespace YuGiOhResult.ViewModels
             }
 
         }
+
+        // ストリームからJSONデータをメモリへ直接ロードする
+        private async Task<T> LoadJsonFromStreamAsync<T>(Stream stream) where T : new()
+        {
+            if (stream == null || stream.Length == 0) return new T();
+            return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(stream) ?? new T();
+        }
+
         // JSONデータをOCIからダウンロードする
         protected async Task DownloadJsonAsync(FileType fileType) 
         {
@@ -155,22 +163,22 @@ namespace YuGiOhResult.ViewModels
                 using HttpClient client = new HttpClient();
                 using HttpResponseMessage response = await client.GetAsync(downloadUrl);
 
-                response.EnsureSuccessStatusCode(); // リクエストが成功したか確
+                response.EnsureSuccessStatusCode(); // リクエストが成功したか確認
                 using Stream contentStream = await response.Content.ReadAsStreamAsync();
                 if (FileType.Decks == fileType)
                 {
                     var newDecks = new List<Deck>();
-                    newDecks = await System.Text.Json.JsonSerializer.DeserializeAsync<List<Deck>>(contentStream);
+                    newDecks = LoadJsonFromStreamAsync<List<Deck>>(contentStream).Result; // Streamからオブジェクトデータへ
                     if (newDecks.IsNullOrEmpty()) return;
-                    Decks = newDecks; 
-                    JsonWrite(FileType.Decks); // デッキリストのJSONデータを保存
+                    Decks = newDecks; // メモリ上のデッキリストを更新
+                    JsonWrite(FileType.Decks); // デッキリストのJSONデータを上書き
                 }
                 else
                 {
                     var newMatches  = new ObservableCollection<MatchResult>();
-                    newMatches = await System.Text.Json.JsonSerializer.DeserializeAsync<ObservableCollection<MatchResult>>(contentStream);
+                    newMatches = LoadJsonFromStreamAsync<ObservableCollection<MatchResult>>(contentStream).Result; // Streamからオブジェクトデータへ
                     if (newMatches.IsNullOrEmpty()) return;
-                    Matches = newMatches;
+                    Matches = newMatches; // メモリ上のマッチリストを更新
                     JsonWrite(FileType.Matches); // マッチリストのJSONデータを保存
                 }
 
