@@ -102,9 +102,10 @@ namespace YuGiOhResult.ViewModels
             using StreamReader reader = new StreamReader(fileStream);
             string jsonContent = await reader.ReadToEndAsync();
 
-            var jObject = Newtonsoft.Json.Linq.JObject.Parse(jsonContent);
-            var appSettingsSection = jObject["AppSettings"];
-            var appSettings = appSettingsSection.ToObject<AppSettings>();
+            using var doc = JsonDocument.Parse(jsonContent);
+            var appSettingsSection = doc.RootElement.GetProperty("AppSettings");
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var appSettings = appSettingsSection.Deserialize<AppSettings>(options);
             return appSettings;
         }
 
