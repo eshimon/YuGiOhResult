@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Oci.Common.Auth;
 using Oci.Common.Http.Signing;
 using System;
@@ -60,10 +59,11 @@ namespace YuGiOhResult.ViewModels
         {
             if (fileType == FileType.Decks)
                 // デッキリストのJSONデータを読み込み
-                Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+                //Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
+                Decks = System.Text.Json.JsonSerializer.Deserialize<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
             else
                 // マッチリストのJSONデータを読み込み
-                Matches = JsonConvert.DeserializeObject<ObservableCollection<MatchResult>>(JsonLoad(matchesDataPath)) ?? new ObservableCollection<MatchResult>();
+                Matches = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<MatchResult>>(JsonLoad(matchesDataPath)) ?? new ObservableCollection<MatchResult> ();
         }
 
         // JSONデータ書き込み
@@ -150,7 +150,7 @@ namespace YuGiOhResult.ViewModels
                 var objectName = fileType == FileType.Decks ? "decks.json" : "matches.json";
                 var downloadUrl = $"{appSettings.ApiHttp}/download-object/{appSettings.NamespaceName}/{appSettings.BacketName}/{objectName}";
 
-                // HttpClientを使用してアップロード
+                // HttpClientを使用してダウンロード
                 using HttpClient client = new HttpClient();
                 using HttpResponseMessage response = await client.GetAsync(downloadUrl);
 

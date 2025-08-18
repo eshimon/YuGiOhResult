@@ -65,7 +65,6 @@
 		<PackageReference Include="Microsoft.Identity.Client" Version="4.73.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="OCI.DotNetSDK.Common" Version="113.2.0" />
 	</ItemGroup>
 
