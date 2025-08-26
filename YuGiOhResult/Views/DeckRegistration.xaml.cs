@@ -1,15 +1,15 @@
 using CommunityToolkit.Maui.Behaviors;
+using YuGiOhResult.ViewModels;
 
 namespace YuGiOhResult.Views;
 
 public partial class DeckRegistration : ContentPage
 {
-	public DeckRegistration()
+	public DeckRegistration(DeckRegistrationViewModel viewModel)
 	{
 		InitializeComponent();
 
         // BindingContext‚ğİ’è
-        var viewModel = new ViewModels.DeckRegistrationViewModel();
         BindingContext = viewModel;
 
         // EventToCommandBehavior‚ğContentPage‚ÌBehaviors‚É’Ç‰Á

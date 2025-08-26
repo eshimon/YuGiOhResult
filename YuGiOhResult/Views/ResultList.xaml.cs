@@ -1,18 +1,18 @@
 using CommunityToolkit.Maui.Behaviors;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration;
+using YuGiOhResult.ViewModels;
 
 
 namespace YuGiOhResult.Views;
 
 public partial class ResultList : ContentPage
 {
-    public ResultList()
+    public ResultList(ResultListViewModel viewModel)
     {
         InitializeComponent();
 
         // BindingContext‚ğİ’è
-        var viewModel = new ViewModels.ResultListViewModel();
         BindingContext = viewModel;
 
         // EventToCommandBehavior‚ğContentPage‚ÌBehaviors‚É’Ç‰Á

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Oci.Common.Auth;
 using Oci.Common.Http.Signing;
@@ -21,12 +22,14 @@ using YuGiOhResult.Models;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class ViewModelBase : ObservableObject
+    public partial class ViewModelBase : ObservableObject
     {
 
         // 宣言
         protected string matchesDataPath;   
         protected string decksDataPath;
+
+        protected readonly ILogger _logger;
 
         protected enum FileType
         {
@@ -41,10 +44,11 @@ namespace YuGiOhResult.ViewModels
         private ObservableCollection<MatchResult> _matches;　// マッチデータ
 
         // コンストラクタ
-        public ViewModelBase()
+        public ViewModelBase(ILogger logger)
         {
             decksDataPath = Path.Combine(FileSystem.AppDataDirectory, "decks.json");
             matchesDataPath = Path.Combine(FileSystem.AppDataDirectory, "matches.json");
+            _logger = logger;
         }
 
         // JSONデータ読み込み（下記同名メソッドのサブルーチン）
@@ -59,7 +63,6 @@ namespace YuGiOhResult.ViewModels
         {
             if (fileType == FileType.Decks)
                 // デッキリストのJSONデータを読み込み
-                //Decks = JsonConvert.DeserializeObject<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
                 Decks = System.Text.Json.JsonSerializer.Deserialize<List<Deck>>(JsonLoad(decksDataPath)) ?? new List<Deck>();
             else
                 // マッチリストのJSONデータを読み込み
@@ -168,7 +171,7 @@ namespace YuGiOhResult.ViewModels
                 if (FileType.Decks == fileType)
                 {
                     var newDecks = new List<Deck>();
-                    newDecks = LoadJsonFromStreamAsync<List<Deck>>(contentStream).Result; // Streamからオブジェクトデータへ
+                    newDecks = await LoadJsonFromStreamAsync<List<Deck>>(contentStream); // Streamからオブジェクトデータへ
                     if (newDecks.IsNullOrEmpty()) return;
                     Decks = newDecks; // メモリ上のデッキリストを更新
                     JsonWrite(FileType.Decks); // デッキリストのJSONデータを上書き
@@ -176,7 +179,7 @@ namespace YuGiOhResult.ViewModels
                 else
                 {
                     var newMatches  = new ObservableCollection<MatchResult>();
-                    newMatches = LoadJsonFromStreamAsync<ObservableCollection<MatchResult>>(contentStream).Result; // Streamからオブジェクトデータへ
+                    newMatches = await LoadJsonFromStreamAsync<ObservableCollection<MatchResult>>(contentStream); // Streamからオブジェクトデータへ
                     if (newMatches.IsNullOrEmpty()) return;
                     Matches = newMatches; // メモリ上のマッチリストを更新
                     JsonWrite(FileType.Matches); // マッチリストのJSONデータを保存
@@ -193,10 +196,10 @@ namespace YuGiOhResult.ViewModels
 
         // 画面表示イベント
         [RelayCommand]
-        public virtual void Appearing()
+        public virtual async void Appearing()
         {
             // デッキリストの初期化
-            JsonLoad(FileType.Decks);
+            await DownloadJsonAsync(FileType.Decks);
         }
     }
 }

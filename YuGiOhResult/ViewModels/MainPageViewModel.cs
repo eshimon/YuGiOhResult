@@ -12,10 +12,11 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Windows.Input;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class MainPageViewModel : ViewModelBase
+    public partial class MainPageViewModel : ViewModelBase
     {
         // バインディング用プロパティ宣言
         [ObservableProperty]
@@ -40,7 +41,7 @@ namespace YuGiOhResult.ViewModels
         private string? _announcement;
 
 
-        public MainPageViewModel()
+        public MainPageViewModel(ILogger<MainPageViewModel> logger) : base(logger)
         {
             // 初期化
             Coin = CoinList[0];
@@ -51,6 +52,14 @@ namespace YuGiOhResult.ViewModels
             
             // マッチデータ呼び出し
             JsonLoad(FileType.Matches);
+        }
+
+        // 画面描画時のコマンド
+        public override async void Appearing()
+        {
+            base.Appearing();
+            // マッチデータ呼び出し
+            await DownloadJsonAsync(FileType.Matches);
         }
 
         // 登録コマンド

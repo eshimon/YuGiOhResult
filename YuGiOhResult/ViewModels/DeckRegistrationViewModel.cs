@@ -11,10 +11,11 @@ using Newtonsoft.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class DeckRegistrationViewModel : ViewModelBase
+    public partial class DeckRegistrationViewModel : ViewModelBase
     {
         // 宣言
         [ObservableProperty]
@@ -55,7 +56,17 @@ namespace YuGiOhResult.ViewModels
             Announcement = "登録完了";
             await Task.Delay(1000);
             Announcement = "";
-        } 
+        }
 
+        public DeckRegistrationViewModel(ILogger<DeckRegistrationViewModel> logger) : base(logger)
+        {
+            
+        }
+
+        // 画面描画時のコマンド
+        public override async void Appearing()
+        {
+            await DownloadJsonAsync(FileType.Decks);
+        }
     }
 }

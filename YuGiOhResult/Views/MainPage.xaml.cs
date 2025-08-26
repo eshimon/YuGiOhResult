@@ -1,17 +1,17 @@
 ﻿using CommunityToolkit.Maui.Behaviors;
+using YuGiOhResult.ViewModels;
 
 namespace YuGiOhResult.Views
 {
     public partial class MainPage : ContentPage
     {
 
-        public MainPage()
+        public MainPage(MainPageViewModel viewModel)
         {
 
             InitializeComponent();
 
             // BindingContextを設定
-            var viewModel = new ViewModels.MainPageViewModel();
             BindingContext = viewModel;
 
             // EventToCommandBehaviorをContentPageのBehaviorsに追加

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,12 @@ using YuGiOhResult.Models;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class ResultListViewModel : ViewModelBase
+    public partial class ResultListViewModel : ViewModelBase
     {
         // 画面描画時のコマンド
-        public override void Appearing()
+        public override async void Appearing()
         {
-            JsonLoad(FileType.Matches);
-            JsonLoad(FileType.Decks);
-            //UploadJsonToOCIAsync(FileType.Decks);
-            //UploadJsonToOCIAsync(FileType.Matches);
+            await DownloadJsonAsync(FileType.Matches);
         }
 
         // 削除コマンド
@@ -46,7 +44,7 @@ namespace YuGiOhResult.ViewModels
             await UploadJsonToOCIAsync(FileType.Matches);
         }
 
-        public ResultListViewModel()
+        public ResultListViewModel(ILogger<ResultListViewModel> logger) : base(logger)
         {
             DownloadJsonAsync(FileType.Matches);
         }

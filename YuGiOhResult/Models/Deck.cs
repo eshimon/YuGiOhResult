@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YuGiOhResult.Models
 {
-    class Deck
+    public class Deck
     {
         public string Name { get; set; }
     }

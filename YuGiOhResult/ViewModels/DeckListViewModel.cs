@@ -1,22 +1,23 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using YuGiOhResult.Models;
-using Newtonsoft.Json;
 using System.Text.Encodings.Web;
-using System.Text.Unicode;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
-using Microsoft.Maui.Controls;
+using System.Text.Unicode;
+using System.Threading.Tasks;
+using YuGiOhResult.Models;
 
 namespace YuGiOhResult.ViewModels
 {
-    partial class DeckListViewModel : ViewModelBase
+    public partial class DeckListViewModel : ViewModelBase
     {
         
         // デッキ削除コマンド
@@ -39,6 +40,11 @@ namespace YuGiOhResult.ViewModels
             // デッキリストのロード
             JsonLoad(FileType.Decks);
 
+        }
+
+        public DeckListViewModel(ILogger<DeckListViewModel> logger) : base(logger)
+        {
+            
         }
 
     }

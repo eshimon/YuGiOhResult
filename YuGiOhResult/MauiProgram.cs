@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
+using YuGiOhResult.ViewModels;
+using YuGiOhResult.Views;
 
 namespace YuGiOhResult;
 
@@ -20,7 +22,16 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        builder.Services.AddTransient<MainPageViewModel>();
+		builder.Services.AddTransient<DeckListViewModel>();
+        builder.Services.AddTransient<DeckRegistrationViewModel>();
+        builder.Services.AddTransient<ResultListViewModel>();
 
-		return builder.Build();
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<DeckList>();
+        builder.Services.AddTransient<DeckRegistration>();
+        builder.Services.AddTransient<ResultList>();
+
+        return builder.Build();
 	}
 }

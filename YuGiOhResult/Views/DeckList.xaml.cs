@@ -1,14 +1,14 @@
 namespace YuGiOhResult.Views;
 using CommunityToolkit.Maui.Behaviors;
+using YuGiOhResult.ViewModels;
 
 public partial class DeckList : ContentPage
 {
-	public DeckList()
+	public DeckList(DeckListViewModel viewModel)
 	{
 		InitializeComponent();
 
         // BindingContext‚ğİ’è
-        var viewModel = new ViewModels.DeckListViewModel();
         BindingContext = viewModel;
 
         // EventToCommandBehavior‚ğContentPage‚ÌBehaviors‚É’Ç‰Á
