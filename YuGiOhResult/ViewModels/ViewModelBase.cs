@@ -26,7 +26,7 @@ namespace YuGiOhResult.ViewModels
     {
 
         // 宣言
-        protected string matchesDataPath;   
+        protected string matchesDataPath;
         protected string decksDataPath;
 
         protected readonly ILogger _logger;

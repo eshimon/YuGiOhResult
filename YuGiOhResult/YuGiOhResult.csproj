@@ -62,12 +62,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="12.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Microsoft.Identity.Client" Version="4.73.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.80" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
-		<PackageReference Include="OCI.DotNetSDK.Common" Version="113.2.0" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.76.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.100" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
+		<PackageReference Include="OCI.DotNetSDK.Common" Version="118.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -89,16 +89,19 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 	  <PackageReference Include="Xamarin.AndroidX.Browser">
-	    <Version>1.8.0.10</Version>
+	    <Version>1.8.0.11</Version>
 	  </PackageReference>
 	  <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData">
-	    <Version>2.9.1</Version>
+	    <Version>2.9.2.1</Version>
 	  </PackageReference>
 	  <PackageReference Include="Xamarin.AndroidX.Navigation.UI">
-	    <Version>2.9.0</Version>
+	    <Version>2.9.2.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="Xamarin.AndroidX.Navigation.Fragment">
+	    <Version>2.9.2.1</Version>
 	  </PackageReference>
 	  <PackageReference Include="Xamarin.Google.Android.Material">
-	    <Version>1.12.0.4</Version>
+	    <Version>1.12.0.5</Version>
 	  </PackageReference>
 	</ItemGroup>
 
